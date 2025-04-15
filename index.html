@@ -53,10 +53,37 @@
             padding: 20px;
             color: #666;
         }
+        .highlight {
+            color: red;
+            font-weight: bold;
+            background-color: rgba(255, 0, 0, 0.1);
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+        table td {
+            max-width: none;
+            white-space: normal;
+            word-break: break-word;
+        }
+        .paper-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .paper-summary {
+            line-height: 1.5;
+            color: #333;
+        }
         .search-container {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             margin-bottom: 20px;
+        }
+        .search-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
         .search-input {
             flex: 1;
@@ -102,18 +129,42 @@
         #pageInfo {
             color: #666;
         }
+        .date-input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .date-separator {
+            color: #666;
+            padding: 0 5px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>arXiv LLM 相关论文</h1>
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="输入关键词搜索..." class="search-input">
-            <select id="sortSelect" class="sort-select">
-                <option value="submittedDate">按发布日期排序</option>
-                <option value="relevance">按相关性排序</option>
-            </select>
-            <button id="searchButton" class="search-button">搜索</button>
+            <div class="search-row">
+                <input type="text" id="searchInput" placeholder="输入关键词搜索..." class="search-input">
+                <select id="searchScope" class="sort-select">
+                    <option value="all">全文搜索</option>
+                    <option value="ti">仅标题</option>
+                    <option value="abs">仅摘要</option>
+                    <option value="cat" style="display: none;">仅分类</option>
+                </select>
+                <select id="sortSelect" class="sort-select">
+                    <option value="submittedDate">按发布日期排序</option>
+                    <option value="relevance">按相关性排序</option>
+                </select>
+                <button id="searchButton" class="search-button">搜索</button>
+            </div>
+            <div class="search-row">
+                <input type="text" id="authorInput" placeholder="输入作者名称..." class="search-input">
+                <input type="date" id="startDate" class="date-input">
+                <span class="date-separator">至</span>
+                <input type="date" id="endDate" class="date-input">
+            </div>
         </div>
         <div class="pagination">
             <button id="prevPage" class="page-button">上一页</button>
