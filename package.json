@@ -1,0 +1,16 @@
+{
+  "name": "paper",
+  "version": "1.0.0",
+  "description": "Electron application with hot reload",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electronmon ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electronmon": "^2.0.2"
+  }
+} 
