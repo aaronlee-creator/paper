@@ -53,11 +53,73 @@
             padding: 20px;
             color: #666;
         }
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .search-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .sort-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .search-button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .page-button {
+            padding: 6px 12px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .page-button:hover {
+            background-color: #e9ecef;
+        }
+        #pageInfo {
+            color: #666;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>arXiv LLM 相关论文</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="输入关键词搜索..." class="search-input">
+            <select id="sortSelect" class="sort-select">
+                <option value="submittedDate">按发布日期排序</option>
+                <option value="relevance">按相关性排序</option>
+            </select>
+            <button id="searchButton" class="search-button">搜索</button>
+        </div>
+        <div class="pagination">
+            <button id="prevPage" class="page-button">上一页</button>
+            <span id="pageInfo">第 1 页</span>
+            <button id="nextPage" class="page-button">下一页</button>
+        </div>
         <table>
             <thead>
                 <tr>

@@ -1,14 +1,19 @@
 const axios = require('axios');
 const xml2js = require('xml2js');
 
-async function fetchArxivPapers() {
+let currentPage = 0;
+let currentQuery = 'all:LLM OR all:"large language model"';
+let currentSortBy = 'submittedDate';
+const RESULTS_PER_PAGE = 10;
+
+async function fetchArxivPapers(page = 0, query = currentQuery, sortBy = currentSortBy) {
     try {
         const response = await axios.get('http://export.arxiv.org/api/query', {
             params: {
-                search_query: 'all:LLM OR all:"large language model"',
-                start: 0,
-                max_results: 10,
-                sortBy: 'submittedDate',
+                search_query: query,
+                start: page * RESULTS_PER_PAGE,
+                max_results: RESULTS_PER_PAGE,
+                sortBy: sortBy,
                 sortOrder: 'descending'
             }
         });
@@ -26,6 +31,7 @@ async function fetchArxivPapers() {
         }));
 
         displayPapers(papers);
+        updatePagination(page);
     } catch (error) {
         console.error('Error fetching papers:', error);
         document.getElementById('papersTable').innerHTML = '<tr><td colspan="4">获取论文数据时出错</td></tr>';
@@ -34,6 +40,11 @@ async function fetchArxivPapers() {
 
 function displayPapers(papers) {
     const table = document.getElementById('papersTable');
+    if (papers.length === 0) {
+        table.innerHTML = '<tr><td colspan="4">未找到相关论文</td></tr>';
+        return;
+    }
+    
     table.innerHTML = papers.map(paper => `
         <tr>
             <td><a href="${paper.link}" target="_blank">${paper.title}</a></td>
@@ -44,5 +55,32 @@ function displayPapers(papers) {
     `).join('');
 }
 
+function updatePagination(page) {
+    currentPage = page;
+    document.getElementById('pageInfo').textContent = `第 ${page + 1} 页`;
+    document.getElementById('prevPage').disabled = page === 0;
+}
+
+// 事件监听器
+document.getElementById('searchButton').addEventListener('click', () => {
+    const searchInput = document.getElementById('searchInput').value;
+    const sortSelect = document.getElementById('sortSelect').value;
+    currentQuery = searchInput ? `all:${searchInput}` : 'all:LLM OR all:"large language model"';
+    currentSortBy = sortSelect;
+    fetchArxivPapers(0, currentQuery, currentSortBy);
+});
+
+document.getElementById('prevPage').addEventListener('click', () => {
+    if (currentPage > 0) {
+        fetchArxivPapers(currentPage - 1, currentQuery, currentSortBy);
+    }
+});
+
+document.getElementById('nextPage').addEventListener('click', () => {
+    fetchArxivPapers(currentPage + 1, currentQuery, currentSortBy);
+});
+
 // 页面加载完成后获取论文数据
-document.addEventListener('DOMContentLoaded', fetchArxivPapers); 
+document.addEventListener('DOMContentLoaded', () => {
+    fetchArxivPapers();
+}); 
